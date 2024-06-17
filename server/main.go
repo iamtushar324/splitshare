@@ -101,6 +101,14 @@ func main() {
 		//Refresh the token when needed to generate new access_token and refresh_token for the user
 		v1.POST("/token/refresh", auth.Refresh)
 
+		//Transactions API
+		transactionController := controllers.NewTransactionController()
+
+		v1.POST("/transactions", auth.TokenValid, transactionController.CreateTransaction)
+		v1.GET("/transactions/:id", auth.TokenValid, transactionController.GetTransaction)
+		v1.GET("/transactions", auth.TokenValid, transactionController.GetTransactionsByUser)
+		v1.POST("/transactions/:id/settle", auth.TokenValid, transactionController.SettleTransaction)
+
 	}
 
 	port := os.Getenv("PORT")
